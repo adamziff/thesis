@@ -1,9 +1,69 @@
 PHASE 1: Get User Utility Functions
 
+SELECTED_FEATURES_WEIGHT = 100
+avgs = []
 
+for user in users:
+    features = get_selected_features(user)
+    weighted_features = features * SELECTED_FEATURES_WEIGHT
+
+    recs = get_recommendations_features(user)
+
+    unweighted_avg = mean(features.extend(recs))
+    weighted_avg = mean((features*SELECTED_FEATURES_WEIGHT).extend(recs))
+
+    if use_weighted:
+        avgs.append(weighted_avg)
+    else:
+        avgs.append(unweighted_avg)
+
+return avgs
 
 PHASE 2: Select Songs
 
+all_features = deduplicate(all_features)
+
+all_dists = calculate_distances(avgs, all_features)
+
+selected_ind = random.sample(len(all_features), NUM_SONGS_TO_SELECT)
+
+done = False
+while not done:
+    current_dists = calculate_distances(avgs, all_features[selected_ind])
+    current_dist_sums = sum(current_dists by user)
+    current_maximin = max(current_dist_sums)
+    current_maximin_user = argmax(current_dist_sums)
+
+    proposed_song = favorite_unchecked_song(current_maximin_user)
+
+    new_dists = calculate_distances(avgs, all_features[new_selected_ind])
+    new_dist_sums = sum(new_dists by user)
+    new_maximin = max(new_dist_sums)
+
+    if new_maximin < current_maximin:
+        switch_in_proposed_song()
+    elif random() < decreasing_sigmoid_function():
+        switch_in_proposed_song()
+
+    if all_songs_tried():
+        done = True
 
 
 PHASE 3: Sort Songs
+
+sorted_features = sort_by_energy(chosen_features)
+
+argsort_ec = argsort(energy_curve)
+
+songs_per_iter = int(len(sorted_features) / len(energy_curve))
+
+argsort_dict = {}
+for i in range(len(energy_curve))
+    start = i * songs_per_iter
+    argsort_dict[argsort_ec[i]] = sorted_features[start:start+songs_per_iter]
+
+chosen_ordered_features = []
+for i in range(len(energy_curve))
+    chosen_ordered_features.append(argsort_dict[i])
+
+return chosen_ordered_features
